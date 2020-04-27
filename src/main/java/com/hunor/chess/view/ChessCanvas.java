@@ -1,9 +1,11 @@
 package com.hunor.chess.view;
 
+import com.hunor.chess.BoardEvent;
 import com.hunor.chess.ImageLoader;
 import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
 import com.hunor.chess.model.pieces.ChessPiece;
+import com.hunor.chess.util.event.EventBus;
 import com.hunor.chess.viewmodel.BoardViewModel;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -25,9 +27,10 @@ public class ChessCanvas extends Pane {
     private GraphicsContext highlightG;
 
     private BoardViewModel boardViewModel;
+    private EventBus eventBus;
 
-    public ChessCanvas(int size, BoardViewModel boardViewModel) {
-        this.mainCanvas  = new Canvas(size, size);
+    public ChessCanvas(int size, BoardViewModel boardViewModel, EventBus eventBus) {
+        this.mainCanvas = new Canvas(size, size);
         this.getChildren().add(mainCanvas);
 
         this.highlightCanvas = new Canvas(size, size);
@@ -36,6 +39,8 @@ public class ChessCanvas extends Pane {
         this.boardViewModel = boardViewModel;
         boardViewModel.getBoardProp().listen(this::redraw);
         boardViewModel.getMousePositionProp().listen(this::highlight);
+
+        this.eventBus = eventBus;
 
         this.setOnMousePressed(this::handlePress);
         this.setOnMouseDragged(this::handleDrag);
@@ -54,40 +59,15 @@ public class ChessCanvas extends Pane {
     }
 
     private void handlePress(MouseEvent mouseEvent) {
-        SimplePos mousePos = getMouseCoords(mouseEvent);
-        if (mousePos != null) {
-            ChessPiece involvedPiece = boardViewModel.getBoardProp().get().pieceAt(mousePos);
-            if (involvedPiece != null && involvedPiece.getPieceColor() == boardViewModel.getBoardProp().get().getActualColor()) {
-                boardViewModel.setInvolvedPiece(involvedPiece);
-                boardViewModel.getMousePositionProp().set(mousePos);
-            }
-        }
+        eventBus.emit(new BoardEvent(BoardEvent.Type.PRESSED, getMouseCoords(mouseEvent)));
     }
 
     private void handleDrag(MouseEvent mouseEvent) {
-        SimplePos mousePos = getMouseCoords(mouseEvent);
-        if (mousePos != null) {
-            if (!mousePos.equals(boardViewModel.getMousePositionProp().get()) && boardViewModel.getInvolvedPiece() != null) {
-                boardViewModel.getMousePositionProp().set(mousePos);
-            }
-        }
+        eventBus.emit(new BoardEvent(BoardEvent.Type.DRAGGED, getMouseCoords(mouseEvent)));
     }
 
     private void handleRelease(MouseEvent mouseEvent) {
-        ChessPiece involvedPiece = boardViewModel.getInvolvedPiece();
-        if (involvedPiece != null) {
-            SimplePos target = getMouseCoords(mouseEvent);
-            ChessBoard chessBoard = boardViewModel.getBoardProp().get().copy();
-            if (involvedPiece.canMoveTo(target, chessBoard)) {
-                chessBoard.movePieceTo(involvedPiece, target);
-                chessBoard.switchActualColor();
-                boardViewModel.getBoardProp().set(chessBoard);
-            }
-
-            boardViewModel.setInvolvedPiece(null);
-        }
-
-        boardViewModel.getMousePositionProp().clear();
+        eventBus.emit(new BoardEvent(BoardEvent.Type.RELEASED, getMouseCoords(mouseEvent)));
     }
 
     private SimplePos getMouseCoords(MouseEvent mouseEvent) {

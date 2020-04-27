@@ -1,4 +1,4 @@
-package com.hunor.chess.logic;
+package com.hunor.chess.util;
 
 import java.util.LinkedList;
 import java.util.List;
