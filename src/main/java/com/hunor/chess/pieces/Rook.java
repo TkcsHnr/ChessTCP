@@ -1,6 +1,6 @@
 package com.hunor.chess.pieces;
 
-import com.hunor.chess.ChessBoard;
+import com.hunor.chess.model.ChessBoard;
 
 public class Rook extends ChessPiece {
     public Rook(PieceColor pieceColor, int x, int y) {
@@ -14,6 +14,12 @@ public class Rook extends ChessPiece {
         int dx = Math.abs(x - this.x);
         int dy = Math.abs(y - this.y);
 
-        return dx == 0 || dy == 0;
+        if (dx == 0) {
+            return true;
+        }
+        else if (dy == 0) {
+            return true;
+        }
+        else return false;
     }
 }

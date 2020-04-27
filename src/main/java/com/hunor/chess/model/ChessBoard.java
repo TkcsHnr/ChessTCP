@@ -1,4 +1,4 @@
-package com.hunor.chess;
+package com.hunor.chess.model;
 
 import com.hunor.chess.pieces.*;
 
@@ -66,4 +66,11 @@ public class ChessBoard {
         return board[x][y];
     }
 
+    public ChessPiece[][] getBoard() {
+        return board;
+    }
+
+    public void setBoard(ChessPiece[][] board) {
+        this.board = board;
+    }
 }

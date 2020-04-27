@@ -1,6 +1,6 @@
 package com.hunor.chess.pieces;
 
-import com.hunor.chess.ChessBoard;
+import com.hunor.chess.model.ChessBoard;
 
 public class Queen extends ChessPiece {
     public Queen(PieceColor pieceColor, int x, int y) {

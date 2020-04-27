@@ -1,8 +1,10 @@
 package com.hunor.chess.pieces;
 
-import com.hunor.chess.ChessBoard;
+import com.hunor.chess.model.ChessBoard;
 
-public abstract class ChessPiece {
+import java.io.Serializable;
+
+public abstract class ChessPiece implements Serializable {
     protected int x, y;
     protected PieceColor pieceColor;
     protected boolean canJump;

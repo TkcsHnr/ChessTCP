@@ -2,5 +2,11 @@ package com.hunor.chess.pieces;
 
 public enum PieceColor {
     BLACK,
-    WHITE
+    WHITE;
+
+
+    @Override
+    public String toString() {
+        return this.name().toLowerCase();
+    }
 }
