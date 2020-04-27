@@ -1,4 +1,4 @@
-package com.hunor.chess;
+package com.hunor.chess.view;
 
 import com.hunor.chess.model.pieces.ChessPiece;
 import javafx.scene.image.Image;

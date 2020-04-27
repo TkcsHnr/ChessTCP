@@ -1,4 +1,4 @@
-package com.hunor.chess;
+package com.hunor.chess.model.board;
 
 import com.hunor.chess.model.SimplePos;
 import com.hunor.chess.util.event.Event;

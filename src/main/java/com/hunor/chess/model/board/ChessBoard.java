@@ -1,5 +1,6 @@
-package com.hunor.chess.model;
+package com.hunor.chess.model.board;
 
+import com.hunor.chess.model.SimplePos;
 import com.hunor.chess.model.pieces.*;
 
 import java.util.ArrayList;

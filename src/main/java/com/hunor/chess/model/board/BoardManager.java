@@ -1,6 +1,5 @@
-package com.hunor.chess.model;
+package com.hunor.chess.model.board;
 
-import com.hunor.chess.BoardEvent;
 import com.hunor.chess.model.pieces.ChessPiece;
 import com.hunor.chess.viewmodel.BoardViewModel;
 

@@ -1,9 +1,8 @@
 package com.hunor.chess.view;
 
-import com.hunor.chess.BoardEvent;
-import com.hunor.chess.ImageLoader;
-import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
+import com.hunor.chess.model.board.BoardEvent;
+import com.hunor.chess.model.board.ChessBoard;
 import com.hunor.chess.model.pieces.ChessPiece;
 import com.hunor.chess.util.event.EventBus;
 import com.hunor.chess.viewmodel.BoardViewModel;

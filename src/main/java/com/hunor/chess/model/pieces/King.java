@@ -1,7 +1,7 @@
 package com.hunor.chess.model.pieces;
 
-import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
+import com.hunor.chess.model.board.ChessBoard;
 
 public class King extends ChessPiece {
     public King(PieceColor pieceColor, int x, int y) {

@@ -1,6 +1,6 @@
 package com.hunor.chess.model.pieces.rules;
 
-import com.hunor.chess.model.ChessBoard;
+import com.hunor.chess.model.board.ChessBoard;
 import com.hunor.chess.model.pieces.ChessPiece;
 
 public class StraightRule {

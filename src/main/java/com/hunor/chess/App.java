@@ -1,7 +1,8 @@
 package com.hunor.chess;
 
-import com.hunor.chess.model.BoardManager;
-import com.hunor.chess.model.ChessBoard;
+import com.hunor.chess.model.board.BoardEvent;
+import com.hunor.chess.model.board.BoardManager;
+import com.hunor.chess.model.board.ChessBoard;
 import com.hunor.chess.util.event.EventBus;
 import com.hunor.chess.view.ChessCanvas;
 import com.hunor.chess.viewmodel.BoardViewModel;
