@@ -6,7 +6,6 @@ import com.hunor.chess.model.SimplePos;
 public class King extends ChessPiece {
     public King(PieceColor pieceColor, int x, int y) {
         super(pieceColor, x, y);
-        this.canJump = false;
         this.important = true;
     }
 

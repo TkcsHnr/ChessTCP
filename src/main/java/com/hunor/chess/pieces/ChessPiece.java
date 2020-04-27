@@ -8,7 +8,6 @@ import java.io.Serializable;
 public abstract class ChessPiece implements Serializable {
     protected SimplePos pos;
     protected PieceColor pieceColor;
-    protected boolean canJump;
     protected boolean important;
 
     public ChessPiece(PieceColor pieceColor, int x, int y) {

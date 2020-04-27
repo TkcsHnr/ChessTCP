@@ -9,7 +9,6 @@ public class Pawn extends ChessPiece {
 
     public Pawn(PieceColor pieceColor, int x, int y) {
         super(pieceColor, x, y);
-        this.canJump = false;
         this.important = false;
 
         this.initialY = y;
@@ -21,7 +20,6 @@ public class Pawn extends ChessPiece {
                 this.dir = -1;
                 break;
         }
-
     }
 
     @Override
@@ -33,8 +31,14 @@ public class Pawn extends ChessPiece {
         int dy = target.getY() - this.pos.getY();
 
         if (this.getPos().getY() == this.initialY) {
-            if (dy == 2 * this.dir && dx == 0)
+            if (dy == 2 * this.dir && dx == 0) {
+                for (int s = 1; s <= 2; s++) {
+                    if (chessBoard.pieceAt(this.pos.getX(), this.initialY + s * this.dir) != null)
+                        return false;
+                }
                 return true;
+            }
+
         }
 
         if (dy == this.dir) {
@@ -45,9 +49,11 @@ public class Pawn extends ChessPiece {
                 } else if (targetPiece.getPieceColor() == this.getPieceColor().opposite()) {
                     return true;
                 }
+            } else if (dx == 0) {
+                if (chessBoard.pieceAt(target.getX(), target.getY()) == null)
+                    return true;
             }
-            else if (dx == 0)
-                return true;
+
         }
 
         return false;

@@ -78,7 +78,7 @@ public class ChessCanvas extends Pane {
                 boardViewModel.getBoardProp().get().movePieceTo(involvedPiece, target);
                 this.redraw(boardViewModel.getBoardProp().get());
 
-                System.out.println("send packet");
+//                System.out.println("send packet");
             }
 
             highlightG.clearRect(0, 0, 8, 8);

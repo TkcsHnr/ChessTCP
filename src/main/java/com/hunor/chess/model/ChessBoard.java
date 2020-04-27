@@ -56,8 +56,12 @@ public class ChessBoard {
     }
 
     public ChessPiece pieceAt(SimplePos simplePos) {
+        return pieceAt(simplePos.getX(), simplePos.getY());
+    }
+
+    public ChessPiece pieceAt(int x, int y) {
         for (ChessPiece piece : pieces) {
-            if (piece.getPos().equals(simplePos)) {
+            if (piece.getPos().getX() == x && piece.getPos().getY() == y) {
                 return piece;
             }
         }
