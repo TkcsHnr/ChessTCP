@@ -26,6 +26,9 @@ public class Pawn extends ChessPiece {
 
     @Override
     public boolean canMoveTo(SimplePos target, ChessBoard chessBoard) {
+        if (!super.canMoveTo(target, chessBoard))
+            return false;
+
         int dx = Math.abs(target.getX() - this.pos.getX());
         int dy = target.getY() - this.pos.getY();
 

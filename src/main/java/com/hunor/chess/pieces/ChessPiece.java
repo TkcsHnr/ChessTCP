@@ -16,10 +16,25 @@ public abstract class ChessPiece implements Serializable {
         this.pos = new SimplePos(x, y);
     }
 
-    public abstract boolean canMoveTo(SimplePos target, ChessBoard chessBoard);
+    public boolean canMoveTo(SimplePos target, ChessBoard chessBoard) {
+        if (target == null)
+            return false;
+        if (chessBoard == null)
+            return false;
+
+        ChessPiece targetPiece = chessBoard.pieceAt(target);
+        if (targetPiece != null && targetPiece.getPieceColor() == this.getPieceColor())
+            return false;
+
+        return true;
+    }
 
     public SimplePos getPos() {
         return pos;
+    }
+
+    public void setPos(SimplePos pos) {
+        this.pos = pos;
     }
 
     public PieceColor getPieceColor() {

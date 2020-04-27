@@ -12,13 +12,15 @@ public class Rook extends ChessPiece {
 
     @Override
     public boolean canMoveTo(SimplePos target, ChessBoard chessBoard) {
+        if (!super.canMoveTo(target, chessBoard))
+            return false;
+
         int dx = Math.abs(target.getX() - this.pos.getX());
         int dy = Math.abs(target.getY() - this.pos.getY());
 
         if (dx == 0) {
             return true;
-        }
-        else if (dy == 0) {
+        } else if (dy == 0) {
             return true;
         }
         else return false;

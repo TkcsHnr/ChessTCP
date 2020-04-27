@@ -3,7 +3,6 @@ package com.hunor.chess.view;
 import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
 import com.hunor.chess.pieces.ChessPiece;
-import com.hunor.chess.pieces.PieceColor;
 import com.hunor.chess.viewmodel.BoardViewModel;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -75,7 +74,10 @@ public class ChessCanvas extends Pane {
         ChessPiece involvedPiece = boardViewModel.getInvolvedPieceProp().get();
         if (involvedPiece != null) {
             SimplePos target = getMouseCoords(mouseEvent);
-            if (target != null && involvedPiece.canMoveTo(target, boardViewModel.getBoardProp().get())) {
+            if (involvedPiece.canMoveTo(target, boardViewModel.getBoardProp().get())) {
+                boardViewModel.getBoardProp().get().movePieceTo(involvedPiece, target);
+                this.redraw(boardViewModel.getBoardProp().get());
+
                 System.out.println("send packet");
             }
 

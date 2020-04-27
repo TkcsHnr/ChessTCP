@@ -65,8 +65,14 @@ public class ChessBoard {
         return null;
     }
 
-    public void movePieceTo(ChessPiece piece, int x, int y) {
+    public void movePieceTo(ChessPiece piece, SimplePos target) {
+        if (pieceAt(target) != null) {
+            this.pieces.remove(pieceAt(target));
+        }
 
+        ChessPiece involved = pieceAt(piece.getPos());
+
+        involved.setPos(target);
     }
 
 }
