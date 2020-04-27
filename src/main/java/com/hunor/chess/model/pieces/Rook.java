@@ -1,8 +1,8 @@
-package com.hunor.chess.pieces;
+package com.hunor.chess.model.pieces;
 
 import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
-import com.hunor.chess.pieces.rules.StraightRule;
+import com.hunor.chess.model.pieces.rules.StraightRule;
 
 public class Rook extends ChessPiece {
     public Rook(PieceColor pieceColor, int x, int y) {

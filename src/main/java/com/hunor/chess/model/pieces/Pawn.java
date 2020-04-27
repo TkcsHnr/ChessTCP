@@ -1,4 +1,4 @@
-package com.hunor.chess.pieces;
+package com.hunor.chess.model.pieces;
 
 import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
@@ -46,12 +46,9 @@ public class Pawn extends ChessPiece {
                 ChessPiece targetPiece = chessBoard.pieceAt(target);
                 if (targetPiece == null) {
                     return false;
-                } else if (targetPiece.getPieceColor() == this.getPieceColor().opposite()) {
-                    return true;
-                }
+                } else return targetPiece.getPieceColor() == this.getPieceColor().opposite();
             } else if (dx == 0) {
-                if (chessBoard.pieceAt(target.getX(), target.getY()) == null)
-                    return true;
+                return chessBoard.pieceAt(target.getX(), target.getY()) == null;
             }
 
         }

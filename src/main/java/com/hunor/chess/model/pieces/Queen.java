@@ -1,9 +1,9 @@
-package com.hunor.chess.pieces;
+package com.hunor.chess.model.pieces;
 
 import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
-import com.hunor.chess.pieces.rules.DiagonalRule;
-import com.hunor.chess.pieces.rules.StraightRule;
+import com.hunor.chess.model.pieces.rules.DiagonalRule;
+import com.hunor.chess.model.pieces.rules.StraightRule;
 
 public class Queen extends ChessPiece {
     public Queen(PieceColor pieceColor, int x, int y) {

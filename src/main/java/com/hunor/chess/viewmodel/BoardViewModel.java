@@ -3,7 +3,7 @@ package com.hunor.chess.viewmodel;
 import com.hunor.chess.logic.Property;
 import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
-import com.hunor.chess.pieces.ChessPiece;
+import com.hunor.chess.model.pieces.ChessPiece;
 
 public class BoardViewModel {
 

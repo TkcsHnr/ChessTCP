@@ -1,12 +1,14 @@
 package com.hunor.chess.model;
 
-import com.hunor.chess.pieces.*;
+import com.hunor.chess.model.pieces.*;
 
 import java.util.ArrayList;
 
 public class ChessBoard {
 
     private ArrayList<ChessPiece> pieces;
+
+    private PieceColor actualColor = PieceColor.WHITE;
 
     public ChessBoard() {
         pieces = new ArrayList<>(32);
@@ -79,4 +81,11 @@ public class ChessBoard {
         involved.setPos(target);
     }
 
+    public PieceColor getActualColor() {
+        return actualColor;
+    }
+
+    public void switchActualColor() {
+        actualColor = actualColor.opposite();
+    }
 }

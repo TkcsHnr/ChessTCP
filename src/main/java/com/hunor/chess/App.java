@@ -5,7 +5,6 @@ import com.hunor.chess.view.ChessCanvas;
 import com.hunor.chess.viewmodel.BoardViewModel;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**

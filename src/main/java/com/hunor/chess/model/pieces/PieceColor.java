@@ -1,4 +1,4 @@
-package com.hunor.chess.pieces;
+package com.hunor.chess.model.pieces;
 
 public enum PieceColor {
     BLACK,

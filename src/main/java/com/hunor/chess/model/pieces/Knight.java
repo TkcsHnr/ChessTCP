@@ -1,12 +1,12 @@
-package com.hunor.chess.pieces;
+package com.hunor.chess.model.pieces;
 
 import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
 
-public class King extends ChessPiece {
-    public King(PieceColor pieceColor, int x, int y) {
+public class Knight extends ChessPiece {
+    public Knight(PieceColor pieceColor, int x, int y) {
         super(pieceColor, x, y);
-        this.important = true;
+        this.important = false;
     }
 
     @Override
@@ -17,10 +17,6 @@ public class King extends ChessPiece {
         int dx = Math.abs(target.getX() - this.pos.getX());
         int dy = Math.abs(target.getY() - this.pos.getY());
 
-        if (dx > 0 && dy > 0)
-            if (dx + dy == 2)
-                return true;
-
-        return dx + dy == 1;
+        return (dx == 2 || dy == 2) && dx + dy == 3;
     }
 }

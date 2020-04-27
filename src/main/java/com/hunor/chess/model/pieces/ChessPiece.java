@@ -1,4 +1,4 @@
-package com.hunor.chess.pieces;
+package com.hunor.chess.model.pieces;
 
 import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
@@ -21,9 +21,13 @@ public abstract class ChessPiece implements Serializable {
         if (chessBoard == null)
             return false;
 
-        ChessPiece targetPiece = chessBoard.pieceAt(target);
-        if (targetPiece != null && targetPiece.getPieceColor() == this.getPieceColor())
+        if (chessBoard.getActualColor() != this.pieceColor)
             return false;
+
+        ChessPiece targetPiece = chessBoard.pieceAt(target);
+        if (targetPiece != null) {
+            return targetPiece.getPieceColor() != this.getPieceColor();
+        }
 
         return true;
     }

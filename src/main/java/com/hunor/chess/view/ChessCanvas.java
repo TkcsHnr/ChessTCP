@@ -2,7 +2,7 @@ package com.hunor.chess.view;
 
 import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
-import com.hunor.chess.pieces.ChessPiece;
+import com.hunor.chess.model.pieces.ChessPiece;
 import com.hunor.chess.viewmodel.BoardViewModel;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -56,8 +56,10 @@ public class ChessCanvas extends Pane {
         SimplePos mousePos = getMouseCoords(mouseEvent);
         if (mousePos != null) {
             ChessPiece involvedPiece = boardViewModel.getBoardProp().get().pieceAt(mousePos);
-            if (involvedPiece != null)
+            if (involvedPiece != null) {
                 boardViewModel.getInvolvedPieceProp().set(involvedPiece);
+                boardViewModel.getMousePositionProp().set(mousePos);
+            }
         }
     }
 
@@ -76,9 +78,8 @@ public class ChessCanvas extends Pane {
             SimplePos target = getMouseCoords(mouseEvent);
             if (involvedPiece.canMoveTo(target, boardViewModel.getBoardProp().get())) {
                 boardViewModel.getBoardProp().get().movePieceTo(involvedPiece, target);
+                boardViewModel.getBoardProp().get().switchActualColor();
                 this.redraw(boardViewModel.getBoardProp().get());
-
-//                System.out.println("send packet");
             }
 
             highlightG.clearRect(0, 0, 8, 8);
@@ -106,8 +107,8 @@ public class ChessCanvas extends Pane {
         mainG.drawImage(new Image(getClass().getResourceAsStream("/img/board.png")), 0, 0, 8, 8);
 
         for (ChessPiece piece : chessBoard.getPieces()) {
-            Image image = new Image(getClass().getResourceAsStream("/img/" + piece.getClass().getSimpleName().toLowerCase()
-                    + "_" + piece.getPieceColor() + ".png"));
+            Image image = new Image(getClass().getResourceAsStream("/img/" + piece.getPieceColor() + "/" +
+                    piece.getClass().getSimpleName().toLowerCase() + ".png"));
             mainG.drawImage(image, piece.getPos().getX() + 0.05, piece.getPos().getY() + 0.05, 0.9, 0.9);
         }
     }
