@@ -1,5 +1,6 @@
 package com.hunor.chess.view;
 
+import com.hunor.chess.ImageLoader;
 import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
 import com.hunor.chess.model.pieces.ChessPiece;
@@ -56,8 +57,8 @@ public class ChessCanvas extends Pane {
         SimplePos mousePos = getMouseCoords(mouseEvent);
         if (mousePos != null) {
             ChessPiece involvedPiece = boardViewModel.getBoardProp().get().pieceAt(mousePos);
-            if (involvedPiece != null) {
-                boardViewModel.getInvolvedPieceProp().set(involvedPiece);
+            if (involvedPiece != null && involvedPiece.getPieceColor() == boardViewModel.getBoardProp().get().getActualColor()) {
+                boardViewModel.setInvolvedPiece(involvedPiece);
                 boardViewModel.getMousePositionProp().set(mousePos);
             }
         }
@@ -66,26 +67,25 @@ public class ChessCanvas extends Pane {
     private void handleDrag(MouseEvent mouseEvent) {
         SimplePos mousePos = getMouseCoords(mouseEvent);
         if (mousePos != null) {
-            if (!mousePos.equals(boardViewModel.getMousePositionProp().get()) && boardViewModel.getInvolvedPieceProp().hasValue()) {
+            if (!mousePos.equals(boardViewModel.getMousePositionProp().get()) && boardViewModel.getInvolvedPiece() != null) {
                 boardViewModel.getMousePositionProp().set(mousePos);
             }
         }
     }
 
     private void handleRelease(MouseEvent mouseEvent) {
-        ChessPiece involvedPiece = boardViewModel.getInvolvedPieceProp().get();
+        ChessPiece involvedPiece = boardViewModel.getInvolvedPiece();
         if (involvedPiece != null) {
             SimplePos target = getMouseCoords(mouseEvent);
-            if (involvedPiece.canMoveTo(target, boardViewModel.getBoardProp().get())) {
-                boardViewModel.getBoardProp().get().movePieceTo(involvedPiece, target);
-                boardViewModel.getBoardProp().get().switchActualColor();
-                this.redraw(boardViewModel.getBoardProp().get());
+            ChessBoard chessBoard = boardViewModel.getBoardProp().get().copy();
+            if (involvedPiece.canMoveTo(target, chessBoard)) {
+                chessBoard.movePieceTo(involvedPiece, target);
+                chessBoard.switchActualColor();
+                boardViewModel.getBoardProp().set(chessBoard);
             }
 
-            highlightG.clearRect(0, 0, 8, 8);
-            boardViewModel.getInvolvedPieceProp().clear();
+            boardViewModel.setInvolvedPiece(null);
         }
-
 
         boardViewModel.getMousePositionProp().clear();
     }
@@ -107,23 +107,25 @@ public class ChessCanvas extends Pane {
         mainG.drawImage(new Image(getClass().getResourceAsStream("/img/board.png")), 0, 0, 8, 8);
 
         for (ChessPiece piece : chessBoard.getPieces()) {
-            Image image = new Image(getClass().getResourceAsStream("/img/" + piece.getPieceColor() + "/" +
-                    piece.getClass().getSimpleName().toLowerCase() + ".png"));
+            Image image = ImageLoader.loadPieceImage(piece);
             mainG.drawImage(image, piece.getPos().getX() + 0.05, piece.getPos().getY() + 0.05, 0.9, 0.9);
         }
     }
 
-    private void highlight(SimplePos highlightPos) {
+    private void highlight(SimplePos target) {
         highlightG.clearRect(0, 0, 8, 8);
-        if (highlightPos != null) {
-            switch (boardViewModel.getInvolvedPieceProp().get().getPieceColor()) {
-                case BLACK:
-                    highlightG.setStroke(Color.BLACK);
-                    break;
-                case WHITE:
-                    highlightG.setStroke(Color.WHITE);
+
+        ChessPiece involvedPiece = boardViewModel.getInvolvedPiece();
+
+        if (target != null) {
+            boolean canMove = involvedPiece.canMoveTo(target, boardViewModel.getBoardProp().get());
+            if (canMove) {
+                highlightG.setStroke(Color.GREEN);
+            } else {
+                highlightG.setStroke(Color.RED);
             }
-            highlightG.strokeRect(highlightPos.getX(), highlightPos.getY(), 1, 1);
+            highlightG.strokeRect(target.getX(), target.getY(), 1, 1);
+            highlightG.strokeRect(involvedPiece.getPos().getX(), involvedPiece.getPos().getY(), 1, 1);
         }
     }
 

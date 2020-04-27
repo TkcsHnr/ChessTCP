@@ -8,10 +8,16 @@ public class ChessBoard {
 
     private ArrayList<ChessPiece> pieces;
 
-    private PieceColor actualColor = PieceColor.WHITE;
+    private PieceColor actualColor;
 
     public ChessBoard() {
         pieces = new ArrayList<>(32);
+
+        initDefaultPieces();
+    }
+
+    private void initDefaultPieces() {
+        pieces.clear();
 
         for (int x = 0; x < 8; x++) {
             pieces.add(new Pawn(PieceColor.WHITE, x, 6));
@@ -38,6 +44,19 @@ public class ChessBoard {
 
         pieces.add(new King(PieceColor.BLACK, 4, 0));
         pieces.add(new King(PieceColor.WHITE, 4, 7));
+
+        this.actualColor = PieceColor.WHITE;
+    }
+
+    public ChessBoard copy() {
+        ChessBoard copy = new ChessBoard();
+
+        for (int i = 0; i < this.pieces.size(); i++) {
+            copy.pieces.set(i, this.pieces.get(i));
+        }
+        copy.actualColor = this.actualColor;
+
+        return copy;
     }
 
     public ArrayList<ChessPiece> getPieces(PieceColor pieceColor) {
@@ -75,10 +94,27 @@ public class ChessBoard {
         if (pieceAt(target) != null) {
             this.pieces.remove(pieceAt(target));
         }
+        pieceAt(piece.getPos()).setPos(target);
 
-        ChessPiece involved = pieceAt(piece.getPos());
+        boolean wKing = false;
+        boolean bKing = false;
+        for (ChessPiece wPiece : getPieces(PieceColor.WHITE)) {
+            if (wPiece.isImportant()) {
+                wKing = true;
+                break;
+            }
+        }
+        for (ChessPiece bPiece : getPieces(PieceColor.BLACK)) {
+            if (bPiece.isImportant()) {
+                bKing = true;
+                break;
+            }
+        }
 
-        involved.setPos(target);
+        if (!wKing)
+            initDefaultPieces();
+        else if (!bKing)
+            initDefaultPieces();
     }
 
     public PieceColor getActualColor() {
