@@ -7,19 +7,19 @@ import com.hunor.chess.pieces.ChessPiece;
 
 public class BoardViewModel {
 
-    private Property<ChessBoard> boardProperty = new Property<>();
-    private Property<ChessPiece> involvedPiece = new Property<>();
-    private Property<SimplePos> mousePosition = new Property<>();
+    private Property<ChessBoard> boardProp = new Property<>();
+    private Property<ChessPiece> involvedPieceProp = new Property<>();
+    private Property<SimplePos> mousePositionProp = new Property<>();
 
-    public Property<ChessBoard> getBoardProperty() {
-        return boardProperty;
+    public Property<ChessBoard> getBoardProp() {
+        return boardProp;
     }
 
-    public Property<ChessPiece> getInvolvedPiece() {
-        return involvedPiece;
+    public Property<ChessPiece> getInvolvedPieceProp() {
+        return involvedPieceProp;
     }
 
-    public Property<SimplePos> getMousePosition() {
-        return mousePosition;
+    public Property<SimplePos> getMousePositionProp() {
+        return mousePositionProp;
     }
 }

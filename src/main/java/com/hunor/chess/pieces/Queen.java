@@ -1,6 +1,7 @@
 package com.hunor.chess.pieces;
 
 import com.hunor.chess.model.ChessBoard;
+import com.hunor.chess.model.SimplePos;
 
 public class Queen extends ChessPiece {
     public Queen(PieceColor pieceColor, int x, int y) {
@@ -10,9 +11,9 @@ public class Queen extends ChessPiece {
     }
 
     @Override
-    public boolean canMoveTo(int x, int y, ChessBoard chessBoard) {
-        int dx = Math.abs(x - this.x);
-        int dy = Math.abs(y - this.y);
+    public boolean canMoveTo(SimplePos target, ChessBoard chessBoard) {
+        int dx = Math.abs(target.getX() - this.pos.getX());
+        int dy = Math.abs(target.getY() - this.pos.getY());
 
         return dx == 0 || dy == 0 || dx == dy;
     }

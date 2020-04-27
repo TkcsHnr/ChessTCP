@@ -1,52 +1,50 @@
 package com.hunor.chess.pieces;
 
 import com.hunor.chess.model.ChessBoard;
+import com.hunor.chess.model.SimplePos;
 
 public class Pawn extends ChessPiece {
     private int initialY;
+    private int dir;
 
     public Pawn(PieceColor pieceColor, int x, int y) {
         super(pieceColor, x, y);
-        this.initialY = y;
         this.canJump = false;
         this.important = false;
+
+        this.initialY = y;
+        switch (pieceColor) {
+            case BLACK:
+                this.dir = 1;
+                break;
+            case WHITE:
+                this.dir = -1;
+                break;
+        }
+
     }
 
     @Override
-    public boolean canMoveTo(int x, int y, ChessBoard chessBoard) {
-        if (this.y == this.initialY && x - this.x == 0) {
-            switch (this.pieceColor) {
-                case WHITE:
-                    if (this.y - y == 2)
-                        return true;
-                    break;
-                case BLACK:
-                    if (y - this.y == 2)
-                        return true;
-                    break;
-            }
+    public boolean canMoveTo(SimplePos target, ChessBoard chessBoard) {
+        int dx = Math.abs(target.getX() - this.pos.getX());
+        int dy = target.getY() - this.pos.getY();
+
+        if (this.getPos().getY() == this.initialY) {
+            if (dy == 2 * this.dir && dx == 0)
+                return true;
         }
-        switch (this.pieceColor) {
-            case WHITE:
-                if (this.y - y == 1 && Math.abs(this.x - x) <= 1) {
-                    ChessPiece targetPiece = chessBoard.pieceAt(x, y);
-                    if (targetPiece == null) {
-                        return true;
-                    } else if (targetPiece.getPieceColor() == PieceColor.BLACK) {
-                        return true;
-                    }
+
+        if (dy == this.dir) {
+            if (dx == 1) {
+                ChessPiece targetPiece = chessBoard.pieceAt(target);
+                if (targetPiece == null) {
+                    return false;
+                } else if (targetPiece.getPieceColor() == this.getPieceColor().opposite()) {
+                    return true;
                 }
-                break;
-            case BLACK:
-                if (y - this.y == 1) {
-                    ChessPiece targetPiece = chessBoard.pieceAt(x, y);
-                    if (targetPiece == null) {
-                        return true;
-                    } else if (targetPiece.getPieceColor() == PieceColor.WHITE) {
-                        return true;
-                    }
-                }
-                break;
+            }
+            else if (dx == 0)
+                return true;
         }
 
         return false;

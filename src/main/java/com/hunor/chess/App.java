@@ -24,7 +24,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
 
-        boardViewModel.getBoardProperty().set(chessBoard);
+        boardViewModel.getBoardProp().set(chessBoard);
     }
 
     public static void main(String[] args) {

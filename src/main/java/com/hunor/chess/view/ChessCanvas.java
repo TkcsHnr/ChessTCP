@@ -3,6 +3,7 @@ package com.hunor.chess.view;
 import com.hunor.chess.model.ChessBoard;
 import com.hunor.chess.model.SimplePos;
 import com.hunor.chess.pieces.ChessPiece;
+import com.hunor.chess.pieces.PieceColor;
 import com.hunor.chess.viewmodel.BoardViewModel;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -33,14 +34,8 @@ public class ChessCanvas extends Pane {
         this.getChildren().add(highlightCanvas);
 
         this.boardViewModel = boardViewModel;
-        boardViewModel.getBoardProperty().listen(this::redraw);
-        boardViewModel.getMousePosition().listen(this::highlight);
-        boardViewModel.getInvolvedPiece().listen(v -> {
-            if (v == null) {
-                System.out.println("send packet");
-                highlightG.clearRect(0, 0, 8, 8);
-            }
-        });
+        boardViewModel.getBoardProp().listen(this::redraw);
+        boardViewModel.getMousePositionProp().listen(this::highlight);
 
         this.setOnMousePressed(this::handlePress);
         this.setOnMouseDragged(this::handleDrag);
@@ -59,36 +54,47 @@ public class ChessCanvas extends Pane {
     }
 
     private void handlePress(MouseEvent mouseEvent) {
-        try {
-            Point2D point = affine.inverseTransform(mouseEvent.getX(), mouseEvent.getY());
-            int simX = (int) point.getX();
-            int simY = (int) point.getY();
-
-            ChessPiece involvedPiece = boardViewModel.getBoardProperty().get().pieceAt(simX, simY);
+        SimplePos mousePos = getMouseCoords(mouseEvent);
+        if (mousePos != null) {
+            ChessPiece involvedPiece = boardViewModel.getBoardProp().get().pieceAt(mousePos);
             if (involvedPiece != null)
-                boardViewModel.getInvolvedPiece().set(involvedPiece);
-        } catch (NonInvertibleTransformException e) {
-            e.printStackTrace();
+                boardViewModel.getInvolvedPieceProp().set(involvedPiece);
         }
     }
 
     private void handleDrag(MouseEvent mouseEvent) {
-        try {
-            Point2D point = affine.inverseTransform(mouseEvent.getX(), mouseEvent.getY());
-            SimplePos simplePos = new SimplePos((int)point.getX(), (int)point.getY());
-            if (!simplePos.equals(boardViewModel.getMousePosition().get()) && boardViewModel.getInvolvedPiece().hasValue()) {
-                boardViewModel.getMousePosition().set(simplePos);
+        SimplePos mousePos = getMouseCoords(mouseEvent);
+        if (mousePos != null) {
+            if (!mousePos.equals(boardViewModel.getMousePositionProp().get()) && boardViewModel.getInvolvedPieceProp().hasValue()) {
+                boardViewModel.getMousePositionProp().set(mousePos);
             }
-        } catch (NonInvertibleTransformException e) {
-            e.printStackTrace();
         }
     }
 
     private void handleRelease(MouseEvent mouseEvent) {
-        boardViewModel.getMousePosition().clear();
+        ChessPiece involvedPiece = boardViewModel.getInvolvedPieceProp().get();
+        if (involvedPiece != null) {
+            SimplePos target = getMouseCoords(mouseEvent);
+            if (target != null && involvedPiece.canMoveTo(target, boardViewModel.getBoardProp().get())) {
+                System.out.println("send packet");
+            }
 
-        if (boardViewModel.getInvolvedPiece().hasValue())
-            boardViewModel.getInvolvedPiece().clear();
+            highlightG.clearRect(0, 0, 8, 8);
+            boardViewModel.getInvolvedPieceProp().clear();
+        }
+
+
+        boardViewModel.getMousePositionProp().clear();
+    }
+
+    private SimplePos getMouseCoords(MouseEvent mouseEvent) {
+        try {
+            Point2D point = affine.inverseTransform(mouseEvent.getX(), mouseEvent.getY());
+            return new SimplePos((int)point.getX(), (int)point.getY());
+        } catch (NonInvertibleTransformException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private void redraw(ChessBoard chessBoard) {
@@ -97,22 +103,23 @@ public class ChessCanvas extends Pane {
 
         mainG.drawImage(new Image(getClass().getResourceAsStream("/img/board.png")), 0, 0, 8, 8);
 
-        for (int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
-                ChessPiece piece = chessBoard.pieceAt(x, y);
-                if (piece != null) {
-                    Image image = new Image(getClass().getResourceAsStream("/img/" + piece.getClass().getSimpleName().toLowerCase()
-                            + "_" + piece.getPieceColor() + ".png"));
-                    mainG.drawImage(image, x+0.05, y+0.05, 0.9, 0.9);
-                }
-            }
+        for (ChessPiece piece : chessBoard.getPieces()) {
+            Image image = new Image(getClass().getResourceAsStream("/img/" + piece.getClass().getSimpleName().toLowerCase()
+                    + "_" + piece.getPieceColor() + ".png"));
+            mainG.drawImage(image, piece.getPos().getX() + 0.05, piece.getPos().getY() + 0.05, 0.9, 0.9);
         }
     }
 
     private void highlight(SimplePos highlightPos) {
         highlightG.clearRect(0, 0, 8, 8);
         if (highlightPos != null) {
-            highlightG.setStroke(Color.GREEN);
+            switch (boardViewModel.getInvolvedPieceProp().get().getPieceColor()) {
+                case BLACK:
+                    highlightG.setStroke(Color.BLACK);
+                    break;
+                case WHITE:
+                    highlightG.setStroke(Color.WHITE);
+            }
             highlightG.strokeRect(highlightPos.getX(), highlightPos.getY(), 1, 1);
         }
     }
