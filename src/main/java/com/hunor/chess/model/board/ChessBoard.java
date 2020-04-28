@@ -77,10 +77,13 @@ public class ChessBoard {
         return pieces;
     }
 
+<<<<<<< HEAD
     public void setPieces(ArrayList<ChessPiece> pieces) {
         this.pieces = pieces;
     }
 
+=======
+>>>>>>> 14676a0c26466530c9259f42704d2e3d71721487
     public ChessPiece pieceAt(SimplePos simplePos) {
         return pieceAt(simplePos.getX(), simplePos.getY());
     }
@@ -126,10 +129,13 @@ public class ChessBoard {
         return actualColor;
     }
 
+<<<<<<< HEAD
     public void setActualColor(PieceColor actualColor) {
         this.actualColor = actualColor;
     }
 
+=======
+>>>>>>> 14676a0c26466530c9259f42704d2e3d71721487
     public void switchActualColor() {
         actualColor = actualColor.opposite();
     }

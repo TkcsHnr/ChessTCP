@@ -1,8 +1,12 @@
 package com.hunor.chess.model;
 
+<<<<<<< HEAD
 import java.io.Serializable;
 
 public class SimplePos implements Serializable {
+=======
+public class SimplePos {
+>>>>>>> 14676a0c26466530c9259f42704d2e3d71721487
     private int x, y;
 
     public SimplePos(int x, int y) {
