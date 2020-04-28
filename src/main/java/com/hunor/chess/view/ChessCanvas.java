@@ -72,11 +72,7 @@ public class ChessCanvas extends Pane {
     private SimplePos getMouseCoords(MouseEvent mouseEvent) {
         try {
             Point2D point = affine.inverseTransform(mouseEvent.getX(), mouseEvent.getY());
-<<<<<<< HEAD
             return new SimplePos((int) point.getX(), (int) point.getY());
-=======
-            return new SimplePos((int)point.getX(), (int)point.getY());
->>>>>>> 14676a0c26466530c9259f42704d2e3d71721487
         } catch (NonInvertibleTransformException e) {
             e.printStackTrace();
             return null;
@@ -108,7 +104,6 @@ public class ChessCanvas extends Pane {
                 highlightG.setStroke(Color.RED);
             }
             highlightG.strokeRect(target.getX(), target.getY(), 1, 1);
-<<<<<<< HEAD
 
             switch (involvedPiece.getPieceColor()) {
                 case WHITE:
@@ -118,8 +113,6 @@ public class ChessCanvas extends Pane {
                     highlightG.setStroke(Color.BLACK);
                     break;
             }
-=======
->>>>>>> 14676a0c26466530c9259f42704d2e3d71721487
             highlightG.strokeRect(involvedPiece.getPos().getX(), involvedPiece.getPos().getY(), 1, 1);
         }
     }
