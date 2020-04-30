@@ -3,7 +3,8 @@ package com.hunor.chess.model.board;
 import com.hunor.chess.model.SimplePos;
 import com.hunor.chess.model.pieces.ChessPiece;
 import com.hunor.chess.model.pieces.PieceColor;
-import com.hunor.chess.net.packet.PieceMovementPacket;
+import com.hunor.chess.net.packet.MovementEvent;
+import com.hunor.chess.net.packet.MovementEvent.Type;
 import com.hunor.chess.util.event.EventBus;
 import com.hunor.chess.viewmodel.BoardViewModel;
 
@@ -61,13 +62,12 @@ public class BoardManager {
         ChessBoard chessBoard = boardViewModel.getBoardProp().get().copy();
         if (involvedPiece.canMoveTo(boardEvent.getPos(), chessBoard)) {
             SimplePos initial = involvedPiece.getPos();
-            //asdasd
 
             chessBoard.movePieceTo(involvedPiece, boardEvent.getPos());
             chessBoard.switchActualColor();
             boardViewModel.getBoardProp().set(chessBoard);
 
-            eventBus.emit(new PieceMovementPacket(initial, boardEvent.getPos()));
+            eventBus.emit(new MovementEvent(Type.SEND, initial, boardEvent.getPos()));
         }
 
         boardViewModel.setInvolvedPiece(null);

@@ -1,7 +1,9 @@
 package com.hunor.chess.net;
 
-import com.hunor.chess.ChessFX;
 import com.hunor.chess.model.pieces.PieceColor;
+import com.hunor.chess.net.packet.MovementEvent;
+import com.hunor.chess.net.packet.MovementEvent.Type;
+import com.hunor.chess.util.event.EventBus;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -9,20 +11,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
-public class Server extends ChessFX {
+public class Server {
 
-    private static int PORT;
     private ServerSocket listener;
 
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
-    public Server() {
+    public Server(int port, EventBus eventBus) {
         super();
 
         try {
-            listener = new ServerSocket(PORT);
+            listener = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
             exit();
@@ -36,9 +38,11 @@ public class Server extends ChessFX {
                 in = new ObjectInputStream(socket.getInputStream());
 
                 while (true) {
-                    packetReceived(in.readObject());
+                    Object packet = in.readObject();
+                    if (packet instanceof MovementEvent)
+                        eventBus.emit(new MovementEvent(Type.RECEIVE, ((MovementEvent) packet).getInitial(), ((MovementEvent) packet).getTarget()));
                 }
-            } catch (EOFException closed) {
+            } catch (EOFException | SocketException closed) {
                 System.out.println("closed");
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -46,23 +50,10 @@ public class Server extends ChessFX {
         }).start();
     }
 
-    public static void main(String[] args) {
-        try {
-            PORT = Integer.parseInt(args[0]);
-        } catch (ArrayIndexOutOfBoundsException | NumberFormatException argExc) {
-            System.exit(-1);
-            return;
-        }
-
-        launch(args);
-    }
-
-    @Override
     public PieceColor managerColor() {
         return PieceColor.WHITE;
     }
 
-    @Override
     public void sendPacket(Object packet) {
         try {
             out.reset();
@@ -73,11 +64,12 @@ public class Server extends ChessFX {
         }
     }
 
-    @Override
     public void exit() {
         try {
-            in.close();
-            out.close();
+            if (in != null)
+                in.close();
+            if (out != null)
+                out.close();
             listener.close();
         } catch (IOException e) {
             e.printStackTrace();

@@ -18,6 +18,9 @@ public class EventBus {
 
     public void emit(Event event) {
         Class eventClass = event.getClass();
+        if (listeners.get(eventClass) == null)
+            return;
+
         for (EventListener eventListener : listeners.get(eventClass)) {
             eventListener.handle(event);
         }
