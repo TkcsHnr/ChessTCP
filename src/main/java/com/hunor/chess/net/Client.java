@@ -11,16 +11,14 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class Client {
+public class Client implements Participant {
 
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private EventBus eventBus;
 
     public Client(String host, int port, EventBus eventBus) {
         super();
-        this.eventBus = eventBus;
 
         try {
             socket = new Socket(host, port);
@@ -45,10 +43,12 @@ public class Client {
         }).start();
     }
 
+    @Override
     public PieceColor managerColor() {
         return PieceColor.BLACK;
     }
 
+    @Override
     public void sendPacket(Object packet) {
         try {
             out.reset();
@@ -59,6 +59,7 @@ public class Client {
         }
     }
 
+    @Override
     public void exit() {
         try {
             if (in != null)

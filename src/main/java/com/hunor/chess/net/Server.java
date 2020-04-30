@@ -13,7 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class Server {
+public class Server implements Participant {
 
     private ServerSocket listener;
 
@@ -50,10 +50,12 @@ public class Server {
         }).start();
     }
 
+    @Override
     public PieceColor managerColor() {
         return PieceColor.WHITE;
     }
 
+    @Override
     public void sendPacket(Object packet) {
         try {
             out.reset();
@@ -64,6 +66,7 @@ public class Server {
         }
     }
 
+    @Override
     public void exit() {
         try {
             if (in != null)
